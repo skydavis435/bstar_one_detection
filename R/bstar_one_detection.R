@@ -9,7 +9,7 @@ one.detection <- function(start.date="2017-01-01",end.date="2017-12-31"){
 #Setup
   working.directory<-file.path(path.expand("~"),"Documents","BSTAR_One_Detection")
   radar.data<-file.path(path.expand("~"),"Documents", "Radar_Data","BSTAR_V2")
-  numCores<-detectCores()
+  numCores<-detectCores()-1
   #start.date <- "2017-01-01"
   #end.date<- "2017-12-31"
 #Load the radar data.
@@ -21,9 +21,11 @@ one.detection <- function(start.date="2017-01-01",end.date="2017-12-31"){
 #One year at a time
   filelist$date <- strptime(x = filelist$filename,format = "%Y.%m.%d")
   sub.filelist <- subset(filelist, nchar(filename)!=37)
-  sub.filelist <- subset(filelist, date >= as.POSIXct(x = start.date) & date <= as.POSIXct(end.date))
+  sub.filelist <- subset(sub.filelist, date >= as.POSIXct(x = start.date) & date <= as.POSIXct(end.date))
   datalist <- mclapply(sub.filelist$filename,fread,mc.cores = numCores) #faster if loading multiple CSV files    
   data <- rbindlist(datalist)
+#Only bird
+  data<-subset(data, CEAT.Classification == "Bird")
 #Date/Time
   data$`Start.Time_US/Central`<- as.POSIXct(x = data$`Start.Time_US/Central`, tz="US/Central")
   data$`End.time_US/Central` <- as.POSIXct(x = data$`End.time_US/Central`, tz="US/Central")  
