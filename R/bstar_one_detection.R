@@ -1,4 +1,4 @@
-one.detection <- function(){
+one.detection <- function(start.date="2017-01-01",end.date="2017-12-31"){
 #Examine Single Detection Tracks Throughout BSTAR V2 Deployment
   require(data.table)
   require(bit64)
@@ -10,8 +10,8 @@ one.detection <- function(){
   working.directory<-file.path(path.expand("~"),"Documents","BSTAR_One_Detection")
   radar.data<-file.path(path.expand("~"),"Documents", "Radar_Data","BSTAR_V2")
   numCores<-detectCores()
-  start.date <- "2018-01-01"
-  end.date<- "2018-12-31"
+  #start.date <- "2017-01-01"
+  #end.date<- "2017-12-31"
 #Load the radar data.
   setwd(radar.data)
   filelist<-list.files(pattern="\\.csv$")
